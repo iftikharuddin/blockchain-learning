@@ -27,4 +27,20 @@ contract('SocialNetwork', (accounts) => {
         })
     })
 
+    // Tests for POST
+    describe('posts', async () => {
+
+        it("create posts", async () => {
+            //todo
+        })
+
+        it("list posts", async () => {
+            //todo
+        })
+
+        it("allow users to tip posts", async () => {
+            //todo
+        })
+    })
+
 })
