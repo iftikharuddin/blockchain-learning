@@ -4,7 +4,7 @@ require('chai')
     .use(require('chai-as-promised'))
     .should()
 
-contract('SocialNetwork', (accounts) => {
+contract('SocialNetwork', ([deployer, author, tipper]) => {
     let socialNetwork;
 
     before(async () => {
@@ -29,18 +29,29 @@ contract('SocialNetwork', (accounts) => {
 
     // Tests for POST
     describe('posts', async () => {
-
+        let result, postCount;
         it("create posts", async () => {
-            //todo
-        })
+            result = await socialNetwork.createPost('This is first entry', {from: author });
+            postCount = socialNetwork.postCount();
+            // on success
+            assert.notEqual(postCount, 0);
+            const event = result.logs[0].args;
+            //assert.equal(event.id.toNumber(), postCount.toNumber(), 'id is correct')
+            assert.equal(event.content, 'This is first entry', 'content is correct');
+            assert.equal(event.tipAmount, '0', 'tip amount is correct')
+            assert.equal(event.author, author, 'author is correct')
 
-        it("list posts", async () => {
-            //todo
-        })
+            // FAILURE: Post must have content
+            await socialNetwork.createPost('', { from: author }).should.be.rejected;
+        });
 
-        it("allow users to tip posts", async () => {
-            //todo
-        })
-    })
+        // it("list posts", async () => {
+        //     //todo
+        // })
+        //
+        // it("allow users to tip posts", async () => {
+        //     //todo
+        // })
+    });
 
-})
+});
